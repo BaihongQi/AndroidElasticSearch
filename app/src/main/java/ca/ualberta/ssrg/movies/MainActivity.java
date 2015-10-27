@@ -10,6 +10,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import ca.ualberta.ssrg.androidelasticsearch.R;
@@ -17,6 +18,7 @@ import ca.ualberta.ssrg.androidelasticsearch.R;
 public class MainActivity extends Activity {
 
 	private ListView movieList;
+	private EditText editText;
 	private Button searchButton;
 	private Movies movies;
 	private ArrayAdapter<Movie> moviesViewAdapter;
@@ -31,7 +33,6 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		movieList = (ListView) findViewById(R.id.movieList);
-		searchButton=(Button)findViewById(R.id.button1);
 	}
 
 	@Override
@@ -42,12 +43,21 @@ public class MainActivity extends Activity {
 		moviesViewAdapter = new ArrayAdapter<Movie>(this, R.layout.list_item,movies);
 		movieList.setAdapter(moviesViewAdapter);
 		movieManager = new ESMovieManager("");
+		searchButton=(Button)findViewById(R.id.button1);
+		editText = (EditText) findViewById(R.id.editText1);
+
+		searchButton.setOnClickListener(
+				new View.OnClickListener() {
+					public void onClick(View view) {
+						search(view);
+					}
+				});
 
 		// Show details when click on a movie
 		movieList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int pos,	long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
 				int movieId = movies.get(pos).getId();
 				startDetailsActivity(movieId);
 			}
@@ -102,18 +112,13 @@ public class MainActivity extends Activity {
 	 */
 	public void search(View view) {
 		movies.clear();
-
 		// TODO: Extract search query from text view
-		searchButton.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int pos,	long id) {
-
-			}
-
-		});
+		movieManager = new ESMovieManager(editText.getText().toString());
 
 		// TODO: Run the search thread
+		SearchThread thread = new SearchThread(editText.getText().toString());
+		thread.start();
+		notifyUpdated();
 
 	}
 	
