@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import ca.ualberta.ssrg.androidelasticsearch.R;
@@ -16,6 +17,7 @@ import ca.ualberta.ssrg.androidelasticsearch.R;
 public class MainActivity extends Activity {
 
 	private ListView movieList;
+	private Button searchButton;
 	private Movies movies;
 	private ArrayAdapter<Movie> moviesViewAdapter;
 	private ESMovieManager movieManager;
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		movieList = (ListView) findViewById(R.id.movieList);
+		searchButton=(Button)findViewById(R.id.button1);
 	}
 
 	@Override
@@ -101,9 +104,17 @@ public class MainActivity extends Activity {
 		movies.clear();
 
 		// TODO: Extract search query from text view
-		
+		searchButton.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int pos,	long id) {
+
+			}
+
+		});
+
 		// TODO: Run the search thread
-		
+
 	}
 	
 	/**
